@@ -1,2 +1,97 @@
 CREATE DATABASE IF NOT EXISTS BankOfMorocco;
 USE BankOfMorocco;
+
+-- ADDRESS TABLE
+CREATE TABLE IF NOT EXISTS address (
+    id VARCHAR(50) PRIMARY KEY,
+    city VARCHAR(50),
+    district VARCHAR(50),
+    street VARCHAR(50),
+    postalCode VARCHAR(10),
+    date TIMESTAMP
+);
+
+-- PERMISSION TABLE
+CREATE TABLE IF NOT EXISTS permission (
+    id VARCHAR(50) PRIMARY KEY,
+    name VARCHAR(50)
+);
+
+-- ROLE TABLE
+CREATE TABLE IF NOT EXISTS role (
+    name VARCHAR(50) PRIMARY KEY
+);
+
+-- BANK TABLE
+CREATE TABLE IF NOT EXISTS bank (
+    id VARCHAR(50) PRIMARY KEY,
+    name VARCHAR(20) UNIQUE,
+    logo VARCHAR(100)
+);
+
+-- AGENCY TABLE 
+CREATE TABLE IF NOT EXISTS agency (
+    id VARCHAR(50) PRIMARY KEY,
+    longitude VARCHAR(20),
+    latitude VARCHAR(20),
+    bank_id VARCHAR(50),
+    address_id VARCHAR(50),
+    FOREIGN KEY (bank_id) REFERENCES bank(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- ATM TABLE
+CREATE TABLE IF NOT EXISTS atm (
+    id VARCHAR(50) PRIMARY KEY,
+    longitude VARCHAR(20),
+    latitude VARCHAR(20),
+    address VARCHAR(100),
+    bank_id VARCHAR(50),
+    FOREIGN KEY (bank_id) REFERENCES bank(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- USER TABLE
+CREATE TABLE IF NOT EXISTS user (
+    id VARCHAR(50) PRIMARY KEY,
+    email VARCHAR(50) UNIQUE,
+    phone VARCHAR(50) UNIQUE,
+    username VARCHAR(50) UNIQUE,
+    password VARCHAR(255),
+    nationality VARCHAR(50),
+    gender VARCHAR(50),
+    address_id VARCHAR(50),
+    agency_id VARCHAR(50),
+    date TIMESTAMP,
+    FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (agency_id) REFERENCES agency(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- ACCOUNT TABLE
+CREATE TABLE IF NOT EXISTS account (
+    id VARCHAR(50) PRIMARY KEY,
+    rib VARCHAR(20),
+    currency VARCHAR(10),
+    balance DECIMAL(10,2),
+    user_id VARCHAR(50),
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE
+); 
+
+-- TRANSACTION TABLE
+CREATE TABLE IF NOT EXISTS transaction (
+    id VARCHAR(50) PRIMARY KEY,
+    type ENUM('credit', 'debit'),
+    amount DECIMAL(10,2),
+    sender VARCHAR(50),
+    receptor VARCHAR(50),
+    FOREIGN KEY (sender) REFERENCES account(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (receptor) REFERENCES account(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- PERMISSION OF ROLE TABLE 
+CREATE TABLE IF NOT EXISTS permissionOfRole (
+    id VARCHAR(50) PRIMARY KEY,
+    permission_id VARCHAR(50),
+    role_id VARCHAR(50),
+    FOREIGN KEY (permission_id) REFERENCES permission(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES role(name) ON DELETE CASCADE ON UPDATE CASCADE
+);

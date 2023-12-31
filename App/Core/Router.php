@@ -10,6 +10,20 @@
     $router = [
         "/" => "../Views/Pages/index.php",
         "/Login" => loadAct("Login"),
+
+        "/Admin" => loadAdmin("Login"),
+        "/Admin/Dashboard" => loadAdmin("Login"),
+        "/Admin/Bank" => loadAdmin("Login"),
+        "/Admin/Agency" => loadAdmin("Login"),
+        "/Admin/Atm" => loadAdmin("Login"),
+        "/Admin/User" => loadAdmin("Login"),
+        "/Admin/Account" => loadAdmin("Login"),
+        "/Admin/Transaction" => loadAdmin("Login"),
+
+        "/User" => loadUser("Login"),
+        "/User/Account" => loadUser("Login"),
+        "/User/Transaction" => loadUser("Login"),
+        "/User/Reset-password" => loadUser("Login"),
     ];
 
 
